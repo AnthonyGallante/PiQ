@@ -1,0 +1,185 @@
+# piq.kv - Kivy language file for πQ
+
+<LandingScreen>:
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1 # Opaque dark grey background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: 'vertical'
+        padding: '50dp'
+        spacing: '20dp'
+
+        Label:
+            text: 'πQ'
+            font_size: '48sp'
+            size_hint_y: None
+            height: self.texture_size[1] + dp(20) # Add padding
+            color: 0.2, 0.6, 0.8, 1 # Professional Blue
+
+        Label:
+            id: blitz_high_score
+            text: 'Blitz High Score: 0' # Placeholder
+            font_size: '18sp'
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        Label:
+            id: standard_high_score
+            text: 'Standard High Score: 0' # Placeholder
+            font_size: '18sp'
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        Label:
+            id: unlimited_high_score
+            text: 'Unlimited High Score: 0' # Placeholder
+            font_size: '18sp'
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: '180dp' # Adjust height to fit buttons
+            spacing: '10dp'
+
+            Button:
+                text: 'Blitz (30s)'
+                font_size: '20sp'
+                on_press: root.start_game('Blitz') # Call method on the screen instance
+                background_color: 0.3, 0.7, 0.9, 1
+                background_normal: '' # Needed for background_color
+                size_hint_y: None
+                height: '50dp'
+
+            Button:
+                text: 'Standard (3m)'
+                font_size: '20sp'
+                on_press: root.start_game('Standard') # Call method on the screen instance
+                background_color: 0.3, 0.7, 0.9, 1
+                background_normal: ''
+                size_hint_y: None
+                height: '50dp'
+
+            Button:
+                text: 'Unlimited'
+                font_size: '20sp'
+                on_press: root.start_game('Unlimited') # Call method on the screen instance
+                background_color: 0.3, 0.7, 0.9, 1
+                background_normal: ''
+                size_hint_y: None
+                height: '50dp'
+
+        Label: # Spacer
+            size_hint_y: 1
+
+<CountdownScreen>:
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1 # Opaque dark grey background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: 'vertical'
+        Label:
+            id: countdown_label
+            text: '3'
+            font_size: '100sp'
+            halign: 'center'
+            valign: 'middle'
+
+<GameScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '10dp'
+        spacing: '5dp'
+
+        # --- Modern HUD --- 
+        BoxLayout:
+            id: hud_layout
+            size_hint_y: None
+            height: dp(50) # Slightly taller for better padding/font size
+            padding: [dp(10), dp(5)] # Horizontal and vertical padding
+            spacing: dp(15)
+            # Optional subtle background
+            canvas.before:
+                Color:
+                    rgba: 0.15, 0.15, 0.15, 1 # Slightly lighter dark grey
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            # Score and Combo (Left Aligned Group)
+            BoxLayout:
+                size_hint_x: 0.5 # Take left half
+                Label:
+                    id: score_label
+                    text: 'Score: 0'
+                    font_size: '20sp'
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                Label:
+                    id: combo_label
+                    text: 'Combo: 0'
+                    font_size: '20sp'
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+            
+            # Spacer to push Time/Mistakes right
+            Widget:
+                size_hint_x: 0.1
+
+            # Time and Mistakes (Right Aligned Group)
+            BoxLayout:
+                size_hint_x: 0.4 # Take right part (adjust as needed)
+                Label:
+                    id: timer_label
+                    text: 'Time: 00:00'
+                    font_size: '20sp'
+                    halign: 'right'
+                    valign: 'middle'
+                    text_size: self.size
+                Label:
+                    id: mistakes_label
+                    text: 'Mistakes: 0/3'
+                    font_size: '20sp'
+                    opacity: 0
+                    halign: 'right'
+                    valign: 'middle'
+                    text_size: self.size
+        # --- End HUD --- 
+
+        # --- Centering Logic --- 
+        Label: # Top Spacer
+            size_hint_y: 0.1 # Make top spacer smaller
+
+        ScrollView:
+            id: scroll_view
+            size_hint_y: 0.8 # Give the scroll view the majority of the space
+            # Prevent scroll bar from appearing if content fits
+            # bar_width: 0 
+            BoxLayout:
+                id: digits_display
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                padding: ['10dp', '10dp']
+                spacing: '5dp'
+                # Labels for digits will be added dynamically here
+
+        Label: # Bottom Spacer
+            size_hint_y: 0.1 # Make bottom spacer smaller
+        # --- End Centering Logic ---
+
+        TextInput:
+            id: hidden_input # An invisible input to capture keyboard events
+            size_hint: (0, 0)
+            opacity: 0
+            multiline: False
+            # We bind to keyboard events directly in the GameScreen python class 
