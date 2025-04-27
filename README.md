@@ -1,6 +1,6 @@
 # πQ Memory Game
 
-A memory game challenging users to recall digits of Pi.
+A memory game challenging users to recall digits of Pi (up to 5000) .
 
 ![Untitled video - Made with Clipchamp](https://github.com/user-attachments/assets/da429fd5-c738-4643-bdbf-1ede89b22ffb)
 
